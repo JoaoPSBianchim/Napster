@@ -2,9 +2,7 @@ package NapsterSimplificado.Servidor;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.HashMap;
 
-import NapsterSimplificado.Model.ServicoRequisicoes;
 import NapsterSimplificado.Model.ServicoRequisicoesImp;
 
 public class NapServer {

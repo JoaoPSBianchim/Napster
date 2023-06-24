@@ -1,9 +1,11 @@
 package TCP;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+
 
 public class ThreadServer extends Thread {
     
@@ -16,15 +18,22 @@ public class ThreadServer extends Thread {
     @Override
     public void run() {
         try {
-            InputStreamReader is =  new InputStreamReader(no.getInputStream());
-            BufferedReader reader = new BufferedReader(is);
+            String source = "src/TCP/ArquivoServ/Nature.mp4";
+            byte[] buffer =  new byte[4*1024];
 
+            FileInputStream is = new FileInputStream(source);
             OutputStream os = no.getOutputStream();
-            DataOutputStream writer = new DataOutputStream(os);
 
-            String texto = reader.readLine();
+            int nByteslidos;
 
-            writer.writeBytes(texto.toUpperCase() + "\n");
+            while((nByteslidos = is.read(buffer)) != -1) {
+                os.write(buffer, 0, nByteslidos);
+            }
+
+            System.out.println("Arquivo Enviado!");
+
+            is.close();
+            os.close();
 
         } catch (Exception e) {
             e.printStackTrace();
