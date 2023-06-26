@@ -16,7 +16,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 import NapsterSimplificado.Model.ServicoRequisicoes;
 
@@ -63,7 +62,7 @@ public class Client {
         @Override
         public void run() {
             try {
-                LinkedList<String> donosArquivos = new LinkedList<>();
+                LinkedList<String[]> donosArquivos = new LinkedList<>();
                 String[] meusArquivoStrings;
 
                 Scanner scanner = new Scanner(System.in);
@@ -90,20 +89,22 @@ public class Client {
                             System.out.println("\n");
                         }
                     } else if (pedido.toLowerCase().equals("search")) {
-                        System.out.println("Pedido: " + pedido);
                         pedido = scanner.next();
                         donosArquivos = serv.search(pedido, InetAddress.getLocalHost().getHostAddress(), porta);
-                        System.out.println(donosArquivos.toString());
+                        System.out.println("Quem tem: " + donosArquivos.getFirst()[0] + "   Porta: " + donosArquivos.getFirst()[1]);
+
 
                     } else if (pedido.toLowerCase().equals("download")) {
                         if (!donosArquivos.isEmpty()) {
-                            Socket s = new Socket(donosArquivos.getFirst(), 9000);
+                            Socket s = new Socket(donosArquivos.getFirst()[0], Integer.parseInt(donosArquivos.getFirst()[1]));
 
                             OutputStream os = s.getOutputStream();
                             DataOutputStream writer = new DataOutputStream(os);
 
                             pedido = scanner.next();
                             writer.writeBytes(pedido + "\n");
+
+                            System.out.println("Download Iniciado");
 
                             InputStream is = s.getInputStream();
                             byte[] buffer = new byte[4 * 1024];
@@ -114,8 +115,10 @@ public class Client {
                             while ((nByteslidos = is.read(buffer)) != -1) {
                                 download.write(buffer, 0, nByteslidos);
                             }
-
+                            System.out.println("Download Concluido");
                             download.close();
+                            s.close();
+
                         } else if(pedido.toLowerCase().equals("update")) {
                             pedido = scanner.next();
                             if(serv.update(InetAddress.getLocalHost().getHostAddress(), pedido, porta).equals("UPDATE_OK")) {
@@ -126,7 +129,7 @@ public class Client {
 
                     pedido = scanner.next();
                 }
-
+                
                 scanner.close();
 
             } catch (Exception e) {
