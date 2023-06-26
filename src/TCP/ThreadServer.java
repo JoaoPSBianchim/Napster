@@ -21,18 +21,18 @@ public class ThreadServer extends Thread {
             String source = "src/TCP/ArquivoServ/Nature.mp4";
             byte[] buffer =  new byte[4*1024];
 
-            FileInputStream is = new FileInputStream(source);
+            FileInputStream fis = new FileInputStream(source);
             OutputStream os = no.getOutputStream();
 
             int nByteslidos;
 
-            while((nByteslidos = is.read(buffer)) != -1) {
+            while((nByteslidos = fis.read(buffer)) != -1) {
                 os.write(buffer, 0, nByteslidos);
             }
 
             System.out.println("Arquivo Enviado!");
 
-            is.close();
+            fis.close();
             os.close();
 
         } catch (Exception e) {

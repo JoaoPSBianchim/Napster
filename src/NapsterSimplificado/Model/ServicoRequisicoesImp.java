@@ -17,14 +17,18 @@ public class ServicoRequisicoesImp extends UnicastRemoteObject implements Servic
 
 
     @Override
-    public String join(String nome, String[] arquivos)  throws RemoteException{
+    public String join(String nome, String[] arquivos, int porta)  throws RemoteException{
 
-        for(int i = 0; i<arquivos.length;i++) {
-        	addToHash(arquivos[i], nome);
+        if (arquivos != null) {
+            for(int i = 0; i<arquivos.length;i++) {
+                addToHash(arquivos[i], nome);
+            }
+            //this.ls.forEach((k,v) -> System.out.println("key: "+k+" value:"+v));
+
+            System.out.println("Peer [" + nome + "]:[" + porta + "] adicionado com arquivos" + arquivos.toString());
+        } else {
+            System.out.println("Peer ["+ nome +"]:[" + porta + "] adicionado sem ter arquivos");
         }
-        //this.ls.forEach((k,v) -> System.out.println("key: "+k+" value:"+v));
-
-        System.out.println("Peer [IP]:[porta] adicionado com arquivos [nomes dos arquivos]");
 
         return "JOIN_OK";
     }
@@ -41,7 +45,7 @@ public class ServicoRequisicoesImp extends UnicastRemoteObject implements Servic
 
 
     @Override
-    public LinkedList<String> search(String arquivo) throws RemoteException {
+    public LinkedList<String> search(String arquivo, String id, int porta) throws RemoteException {
         LinkedList<String> donosDosArquivos = new LinkedList<>();
         
         for(HashMap.Entry<String, String> entrada: this.ls.entrySet()) {
@@ -50,14 +54,14 @@ public class ServicoRequisicoesImp extends UnicastRemoteObject implements Servic
             }
         }
         
-        System.out.println("Peer [IP]:[porta] solicitou arquivo []");
+        System.out.println("Peer [" + id + "]:[" + porta + "] solicitou arquivo []");
 
         return donosDosArquivos;
     }
 
 
     @Override
-    public String update(String nome, String arquivos) throws RemoteException {
+    public String update(String nome, String arquivos, int porta) throws RemoteException {
         addToHash(arquivos, nome);
 
         return "UPDATE_OK";
