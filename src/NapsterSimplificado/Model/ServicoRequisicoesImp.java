@@ -24,7 +24,7 @@ public class ServicoRequisicoesImp extends UnicastRemoteObject implements Servic
             }
             //this.ls.forEach((k,v) -> System.out.println("key: "+k+" value:"+v));
 
-            System.out.println("Peer [" + nome + "]:[" + porta + "] adicionado com arquivos " + arquivos.toString());
+            System.out.print("Peer [" + nome + "]:[" + porta + "] adicionado com arquivos ");
             for (String a : arquivos) {
                                 System.out.print(a + " ");
             }

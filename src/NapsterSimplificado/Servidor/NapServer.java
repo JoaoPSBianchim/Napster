@@ -19,6 +19,5 @@ public class NapServer {
 
         reg.bind("rmi://127.0.0.1/Napster", sr);
         
-        System.out.println("Servidor no Ar");
     }
 }
